@@ -18,16 +18,16 @@ function initMap() {
              let data = JSON.parse(xmlhttp.responseText);
 //           console.log(data[0].position.lat)
              for(let i = 0; i < data.length;i ++){
-                 const circle = new google.maps.Circle({
-                        storkeColor: "green",
-                        strokeOpacity: '0.9',
-                        strokeWeight: 0,
-                        fillColor:'blue',
-                        fillOpacity: 0.4,
+                 const marker = new google.maps.Marker({
+//                        storkeColor: "green",
+//                        strokeOpacity: '0.9',
+//                        strokeWeight: 0,
+//                        fillColor:'blue',
+//                        fillOpacity: 0.4,
                         map: map,
-                        radius:150,
+//                        radius:150,
                         clickable:true,
-                        center:{ lat: data[i].position.lat, lng: data[i].position.lng}
+                        position:{ lat: data[i].position.lat, lng: data[i].position.lng}
 
 
                })
@@ -38,9 +38,9 @@ function initMap() {
                    + data[i].available_bike_stands
                    + "</Span></br></br><a style=\"font-size:16px;text-align:center;\" href=\"http://maps.google.com/maps?q="
                    +data[i].position.lat+","
-                   +data[i].position.lng+"\" target=\"_blank\">Check map</a></span>"
+                   +data[i].position.lng+"\" target=\"_blank\">Check in map</a></span>"
 
-                  onceClick(map,circle,displayInfo)
+                  onceClick(map,marker,displayInfo)
 
              }
 
@@ -51,21 +51,21 @@ function initMap() {
       xmlhttp.send();
 
   // The marker
-  const marker = new google.maps.Marker({
-    position: dublin,
-    map: map,
-  });
+//  const marker = new google.maps.Marker({
+//    position: dublin,
+//    map: map,
+//  });
 }
 
 window.initMap = initMap;
 
-function onceClick(map, circle, info){
+function onceClick(map, marker, info){
     let showInfo = new google.maps.InfoWindow({
         content:info
     })
 
-    google.maps.event.addListener(circle, 'click', function(e){
-        showInfo.setPosition(circle.getCenter());
+    google.maps.event.addListener(marker, 'click', function(e){
+        showInfo.setPosition(marker.position);
         showInfo.open(map);
     })
 }
