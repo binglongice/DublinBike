@@ -8,6 +8,22 @@ function initMap() {
     center: dublin,
   });
 
+  // Create DirectionsService and DirectionsRenderer objects
+  const directionsService = new google.maps.DirectionsService();
+  const directionsRenderer = new google.maps.DirectionsRenderer({
+    map: map,
+  });
+
+
+  // Add event listener to the directions form
+  const directionsForm = document.getElementById("directions-form");
+  directionsForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    calculateRoute(directionsService, directionsRenderer);
+  });
+
+
+
   let NAME = "Dublin";
   let APIKEY = "be7bc3cd2980729c4018ffced93e0ef8a4e3067e";
   let url = "https://api.jcdecaux.com/vls/v1/stations?contract="+NAME+"&apiKey="+APIKEY;
@@ -44,11 +60,53 @@ function initMap() {
 
              }
 
+               // Initialize arrays to store bike stations with available bikes and available bike stands
+               let bikeStationsWithAvailableBikes = [];
+               let bikeStationsWithAvailableBikeStands = [];
+
+               // Loop through bike stations data and push stations with available bikes and bike stands to arrays
+               for (let i = 0; i < data.length; i++) {
+                 if (data[i].available_bikes > 0) {
+                       bikeStationsWithAvailableBikes.push(data[i]);
+                 }
+                 if (data[i].available_bike_stands > 0) {
+                       bikeStationsWithAvailableBikeStands.push(data[i]);
+                 }
+               }
+               // Get user's current location
+               navigator.geolocation.getCurrentPosition(function(position) {
+                   const userLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+                   // Calculate distance between user's location and bike stations with available bikes
+                   let bikeStationsWithDistances = [];
+                   for (let i = 0; i < bikeStationsWithAvailableBikes.length; i++) {
+                       const bikeStationLocation = new google.maps.LatLng(bikeStationsWithAvailableBikes[i].position.lat, bikeStationsWithAvailableBikes[i].position.lng);
+                       const distance = google.maps.geometry.spherical.computeDistanceBetween(userLocation, bikeStationLocation);
+                       bikeStationsWithDistances.push({
+                             bikeStation: bikeStationsWithAvailableBikes[i],
+                             distance: distance
+                           });
+                    }
+
+              // Sort bike stations with distances in ascending order
+              bikeStationsWithDistances.sort(function(a, b) {
+                 return a.distance - b.distance;
+              });
+
+              // Get first 3 bike stations with available bikes as recommendations for user's starting location
+              const startingLocationRecommendations = bikeStationsWithDistances.filter(function(bikeStationWithDistance) {
+                  return bikeStationWithDistance.bikeStation.available_bikes > 0;
+               }).slice(0, 3);
+              console.log(startingLocationRecommendations)
+             });
+
+
 
          }
       }
       xmlhttp.open("GET", url, true);
       xmlhttp.send();
+
 
   // The marker
 //  const marker = new google.maps.Marker({
@@ -68,4 +126,28 @@ function onceClick(map, marker, info){
         showInfo.setPosition(marker.position);
         showInfo.open(map);
     })
+}
+
+
+// Calculate and display the route between the origin and destination addresses
+function calculateRoute(directionsService, directionsRenderer) {
+  const originInput = document.getElementById("origin-input");
+  const destinationInput = document.getElementById("destination-input");
+  const origin = originInput.value;
+  const destination = destinationInput.value;
+
+  directionsService.route(
+    {
+      origin: origin,
+      destination: destination,
+      travelMode: google.maps.TravelMode.DRIVING,
+    },
+    (result, status) => {
+      if (status === "OK") {
+        directionsRenderer.setDirections(result);
+      } else {
+        window.alert("Directions request failed due to " + status);
+      }
+    }
+  );
 }
