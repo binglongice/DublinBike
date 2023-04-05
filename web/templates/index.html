@@ -7,39 +7,63 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 
-    <link rel="stylesheet" type="text/css" href="../static/index.css" />
+    <link rel="stylesheet" type="text/css" href="../static/index.css"/>
     <script type="module" src="../static/index.js"></script>
-    <title>Dublin Bike</title>
+    <title>Dublin Bikes</title>
 </head>
 <body>
-        <div class="header">
-            <h1>Dublin Bike Info</h1>
-            <div class="weather"></div>
-        </div>
-        <div class="container">
-            <div class="left-content">
-                <form id="directions-form">
-                 <div>
-                     <label for="origin-input">Origin:</label>
-                     <input id="origin-input" type="text" placeholder="Enter origin address">
-                 </div>
-                 <div>
-                     <label for="destination-input">Destination:</label>
-                     <input id="destination-input" type="text" placeholder="Enter destination address">
-                 </div>
-                 <button type="submit">Confirm</button>
-    </form>
+<div class="header">
+    <div class="weather"></div>
+</div>
+<div class="container">
+    <div class="left-content">
+        <h1 class="title">Dublin Bikes</h1>
+        <form id="directions-form">
+            <div>
+                <label class="input-text" for="origin-input">Please enter your location:</label>
             </div>
-            <div class="right-content">
-                <div id="map"></div>
+            <div>
+                <input class="input-box" id="origin-input" type="text" placeholder="Enter origin address">
             </div>
-        </div>
+
+            <div>
+                <label class="input-text" for="destination-input">Please enter your destination:</label>
+            </div>
+            <div>
+                <input class="input-box" id="destination-input" type="text" placeholder="Enter destination address">
+            </div>
+            <div>
+                <label class="input-text" for="day-hour-input">Please input the day and hour you wish to travel:</label>
+            </div>
+
+            <div id="dropdown">
+                <select name="date" id="date">
+                    <option value="1">Monday</option>
+                    <option value="2">Tuesday</option>
+                    <option value="3">Wednesday</option>
+                    <option value="4">Thursday</option>
+                    <option value="5">Thursday</option>
+                    <option value="6">Thursday</option>
+                    <option value="7">Thursday</option>
+                </select>
+                <input id="select-time" type="time" name="select-time" value="00:00">
+            </div>
+
+            <div>
+                <button class="plan" type="submit">Plan Your Journey</button>
+            </div>
+        </form>
+    </div>
+    <div class="right-content">
+        <div id="map"></div>
+    </div>
+</div>
 
 
-    <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC-XxRT6dVUEmvaAUVwYkF8wnU65RITWO4&callback=initMap&v=weekly"
-      defer
-    ></script>
+<script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC-XxRT6dVUEmvaAUVwYkF8wnU65RITWO4&callback=initMap&v=weekly"
+        defer
+></script>
 
 </body>
 </html>
