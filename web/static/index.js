@@ -33,6 +33,15 @@ function initMap() {
          if(xmlhttp.readyState === 4 && xmlhttp.status === 200){
              let data = JSON.parse(xmlhttp.responseText);
 //           console.log(data[0].position.lat)
+      function getMarkerIcon(availableBikes) {
+         if (availableBikes === 0) {
+           return "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+         } else if (availableBikes <= 5) {
+           return "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
+         } else {
+           return "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
+         }
+       }
              for(let i = 0; i < data.length;i ++){
                  const marker = new google.maps.Marker({
 //                        storkeColor: "green",
@@ -43,7 +52,8 @@ function initMap() {
                         map: map,
 //                        radius:150,
                         clickable:true,
-                        position:{ lat: data[i].position.lat, lng: data[i].position.lng}
+                        position:{ lat: data[i].position.lat, lng: data[i].position.lng},
+                        icon: getMarkerIcon(data[i].available_bikes)
 
 
                })
@@ -151,3 +161,191 @@ function calculateRoute(directionsService, directionsRenderer) {
     }
   );
 }
+
+//async function fetchAvgBikesPerHour() {
+//  const response = await fetch("/avg_bikes_per_hour");
+//  const data = await response.json();
+//  return data;
+//}
+let chart;
+let chartData = { hourly: [] };
+
+async function fetchAvgBikesPerHour() {
+  const response = await fetch("/avg_bikes_per_hour");
+  const data = await response.json();
+  chartData.hourly = data;
+//  console.log("Hourly data fetched:", data);
+  return data;
+}
+
+async function fetchAvgBikesPerDay(stationId) {
+  const response = await fetch(`/avg_bikes_per_day/${stationId}`);
+  const data = await response.json();
+//  console.log(`Data fetched for station ${stationId}:`, data);
+  return data;
+}
+
+
+async function populateStationOptions() {
+  const data = await fetchAvgBikesPerHour();
+  const stationSelect = document.getElementById("stationSelect");
+
+  const stationIds = [...new Set(data.map((row) => row.number))];
+  stationIds.forEach((number) => {
+    const option = document.createElement("option");
+    option.value = number;
+    option.textContent = `Station ${number}`;
+    stationSelect.appendChild(option);
+//    console.log("Populated station options:", stationIds);
+  });
+
+  const chartTypeSelect = document.getElementById("chartTypeSelect");
+  chartTypeSelect.removeEventListener("change", updateChartForSelectedStation);
+  chartTypeSelect.addEventListener("change", () => {
+    updateChartForSelectedStation(chart, data);
+//    console.log("Added event listener for station selection change");
+  });
+
+  stationSelect.removeEventListener("change", updateChartForSelectedStation);
+  stationSelect.addEventListener("change", () => {
+    updateChartForSelectedStation(chart, data);
+//    console.log("Added event listener for station selection change");
+  });
+}
+
+
+function updateChartForSelectedStation(chart, data) {
+  // Guard clause to prevent multiple calls
+//  console.log("Chart element:", document.getElementById("avgBikesPerHourChart"));
+  const ctx = document.getElementById("avgBikesChart").getContext("2d");
+  if (chart && chart.canvas.id !== "avgBikesChart" && chart.canvas.id !== "avgBikesChart") {
+    console.log("Chart already rendered for selected station and chart type");
+    return;
+  }
+
+  const stationSelect = document.getElementById("stationSelect");
+  const chartTypeSelect = document.getElementById("chartTypeSelect");
+  const selectedStation = stationSelect.value;
+  const selectedChartType = chartTypeSelect.value;
+
+  if (chart) {
+    chart.destroy(); // Destroy the previous chart to create a new one
+    console.log("Updating chart for selected station:", selectedStation, "Chart type:", selectedChartType);
+  }
+
+  if (selectedChartType === "hourly") {
+    renderAvgBikesPerHourChart(selectedStation);
+  } else if (selectedChartType === "daily") {
+    renderAvgBikesPerDayChart(selectedStation);
+  }
+}
+
+async function renderAvgBikesPerDayChart(number) {
+  const response = await fetch(`/avg_bikes_per_day/${number}`);
+  const data = await response.json();
+
+  const labels = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  const chartData = Array(7).fill(0);
+  data.forEach((row) => {
+    chartData[row.day_of_week] = row.avg_bikes;
+  });
+
+  const customColor = "rgba(75, 192, 192, 0.2)";
+  const customBorderColor = "rgba(75, 192, 192, 1)";
+
+  const canvas = document.getElementById("avgBikesChart");
+
+  if (chart && chart.canvas === canvas) {
+    chart.destroy();
+  }
+
+  const ctx = canvas.getContext("2d");
+  chart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: `Station ${number}`,
+          data: chartData,
+          backgroundColor: customColor,
+          borderColor: customBorderColor,
+          borderWidth: 1,
+        },
+      ],
+    },
+    options: {
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: "Day of Week",
+          },
+        },
+        y: {
+          title: {
+            display: true,
+            text: "Average Bikes Available",
+          },
+        },
+      },
+    },
+  });
+  document.getElementById("avgBikesChart").id = "avgBikesChart";
+  console.log("Rendered hourly chart for station", number);
+}
+
+
+async function renderAvgBikesPerHourChart(number) {
+  const data = chartData.hourly;
+  const selectedStationData = data.filter(row => row.number === Number(number));
+  const labels = Array.from({ length: 24 }, (_, i) => i);
+
+  const dataset = {
+    label: `Station ${number}`,
+    data: Array(24).fill(0),
+    backgroundColor: `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.2)`,
+    borderColor: `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 1)`,
+    borderWidth: 1,
+  };
+
+  selectedStationData.forEach((row) => {
+    dataset.data[row.hour_of_day] = row.avg_bikes;
+  });
+
+  const ctx = document.getElementById("avgBikesChart").getContext("2d");
+  chart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: labels,
+      datasets: [dataset],
+    },
+    options: {
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: "Hour of Day",
+          },
+        },
+        y: {
+          title: {
+            display: true,
+            text: "Average Bikes Available",
+          },
+        },
+      },
+    },
+  });
+  console.log("Rendered hourly chart for station", number);
+
+  // Populate the station options and update the chart with the initial station data
+  populateStationOptions();
+}
+
+
+
+
+fetchAvgBikesPerHour();
+populateStationOptions();
+//renderAvgBikesPerHourChart();

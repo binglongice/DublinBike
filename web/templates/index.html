@@ -13,11 +13,12 @@
 </head>
 <body>
 <div class="header">
+    <h1 class="title">Dublin Bikes</h1>
     <div class="weather"></div>
 </div>
 <div class="container">
     <div class="left-content">
-        <h1 class="title">Dublin Bikes</h1>
+
         <form id="directions-form">
             <div>
                 <label class="input-text" for="origin-input">Please enter your location:</label>
@@ -42,9 +43,9 @@
                     <option value="2">Tuesday</option>
                     <option value="3">Wednesday</option>
                     <option value="4">Thursday</option>
-                    <option value="5">Thursday</option>
-                    <option value="6">Thursday</option>
-                    <option value="7">Thursday</option>
+                    <option value="5">Friday</option>
+                    <option value="6">Saturday</option>
+                    <option value="7">Sunday</option>
                 </select>
                 <input id="select-time" type="time" name="select-time" value="00:00">
             </div>
@@ -53,6 +54,18 @@
                 <button class="plan" type="submit">Plan Your Journey</button>
             </div>
         </form>
+        <div class="selWrapper">
+            <select id="stationSelect"></select>
+            <select id="chartTypeSelect">
+                <option value="hourly">Hourly Average</option>
+                <option value="daily">Daily Average</option>
+            </select>
+        </div>
+        <div class="chartContainer">
+            <canvas id="avgBikesChart"></canvas>
+<!--            <canvas id="avgBikesChart"></canvas>-->
+        </div>
+
     </div>
     <div class="right-content">
         <div id="map"></div>
@@ -64,7 +77,7 @@
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC-XxRT6dVUEmvaAUVwYkF8wnU65RITWO4&callback=initMap&v=weekly"
         defer
 ></script>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html>
 
