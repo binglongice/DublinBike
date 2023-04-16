@@ -66,6 +66,7 @@ body {
     flex-wrap: wrap;
     width: 100%;
     height: calc(100vh - 400px);
+    min-height: 50vh; /* Add this line */
 }
 
 .left-content {
@@ -133,8 +134,9 @@ body {
     flex-basis: 70%;
     flex-grow: 1;
     height: 100%;
-    width: 100%;
+    width: calc(100% - 60px);
     margin-left: 30px;
+    min-height: 200px; /* Add this line */
 }
 
 .right-content select {
@@ -157,7 +159,7 @@ body {
 }
 
 #map {
-    height: 95%;
+    height: calc(100% - 40px);
     width: 95%;
     margin-left: 27px;
     border-radius: 30px;
@@ -168,17 +170,6 @@ canvas {
   height: 90%;
     margin: 30px;
 }
-
-/*.bottom {*/
-/*  display: flex;*/
-/*  !*width: 100%;*!*/
-/*    !*#D8D998*!*/
-/*    background-color: #E1BB74;*/
-/*    border-radius: 20px;*/
-/*    margin: 20px;*/
-/*    padding-right: -30px;*/
-/*    padding-bottom: 5px;*/
-/*}*/
 
 .bottom {
     width: 100%;
@@ -237,5 +228,36 @@ canvas {
 @media screen and (max-width: 600px) {
     .chart {
         flex: 1 1 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .container {
+        flex-direction: column;
+        margin-right: 60px;
+    }
+
+    .left-content {
+        width: 100%;
+        margin-left: 0;
+        margin-bottom: 20px;
+    }
+
+    .right-content {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    #map {
+        height: 300px; /* Add this line */
+    }
+
+    .chart-container {
+        justify-content: center;
     }
 }

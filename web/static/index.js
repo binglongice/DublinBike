@@ -281,7 +281,7 @@ function updateChartForSelectedStation() {
         document.getElementById("loading").style.display = "none";
     });
     renderAvgBikesPerDayChart(selectedStationId);
-    renderAvgBikesPerHourChart(selectedStationId);
+    resizeCanvas();
 }
 
 async function renderAvgBikesPerDayChart(number) {
@@ -508,3 +508,17 @@ await Promise.all([fetchAvgBikesPerHour(), populateStationOptions(), initWeather
         updateChartForSelectedStation();
         updateCurrentStationStatus(stationsLookUpTable[document.getElementById("stationSelect").value]);
     });
+
+
+function resizeCanvas() {
+    const canvas1 = document.getElementById("avgHourBikesPredictionChart");
+    const canvas2 = document.getElementById("avgDayBikesChart");
+
+    canvas1.width = canvas1.parentNode.clientWidth * 0.9;
+    canvas1.height = canvas1.parentNode.clientHeight * 0.9;
+
+    canvas2.width = canvas2.parentNode.clientWidth * 0.9;
+    canvas2.height = canvas2.parentNode.clientHeight * 0.9;
+}
+
+window.addEventListener("resize", resizeCanvas);
