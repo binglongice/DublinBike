@@ -119,10 +119,10 @@ function initMap() {
                 });
 
                 // Get first 3 bike stations with available bikes as recommendations for user's starting location
-                const startingLocationRecommendations = bikeStationsWithDistances.filter(function (bikeStationWithDistance) {
-                    return bikeStationWithDistance.bikeStation.available_bikes > 0;
-                }).slice(0, 3);
-                console.log(startingLocationRecommendations)
+                // const startingLocationRecommendations = bikeStationsWithDistances.filter(function (bikeStationWithDistance) {
+                //     return bikeStationWithDistance.bikeStation.available_bikes > 0;
+                // }).slice(0, 3);
+                // console.log(startingLocationRecommendations)
             });
 
 
@@ -262,18 +262,19 @@ function updateChartForSelectedStation() {
 
     if (hourlyChart) {
         hourlyChart.destroy(); // Destroy the previous chart to create a new one
-        console.log("Updating hourlyChart for selected station:", selectedStationId);
+        // console.log("Updating hourlyChart for selected station:", selectedStationId);
     }
 
     if (dailyChart) {
         dailyChart.destroy(); // Destroy the previous chart to create a new one
-        console.log("Updating dailyChart for selected station:", selectedStationId);
+        // console.log("Updating dailyChart for selected station:", selectedStationId);
     }
 
     if (avgHourBikesPredictionChart) {
         avgHourBikesPredictionChart.destroy(); // Destroy the previous chart to create a new one
         document.getElementById("avgHourBikesPredictionChart").style.display = "none";
-        console.log("Updating hourlyChart prediction for selected station:", selectedStationId);
+        document.getElementById("loading").style.display = "";
+        // console.log("Updating hourlyChart prediction for selected station:", selectedStationId);
     }
 
     renderAvgBikesPerHourChartInOneWeek(selectedStationId).then(() => {
@@ -335,13 +336,13 @@ async function renderAvgBikesPerDayChart(number) {
         },
     });
     document.getElementById("avgHourBikesPredictionChart").style.display = "";
-    console.log("Rendered daily chart for station", number);
+    // console.log("Rendered daily chart for station", number);
 }
 
 async function getPrediction(stationNumber) {
     const response = await fetch(`/prediction?station_number=` + stationNumber);
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     return data;
 }
 
@@ -411,7 +412,6 @@ async function renderAvgBikesPerHourChartInOneWeek(number) {
 
     const dataByWeekday = convertDataToMap(data);
     const datasets = convertMapToArray(dataByWeekday);
-    console.log('kl', datasets);
 
     const canvas = document.getElementById("avgHourBikesPredictionChart");
 
@@ -443,12 +443,7 @@ async function renderAvgBikesPerHourChartInOneWeek(number) {
             },
         },
     });
-    // document.getElementById("predication_chart").style.display = "";
-    // avgHourBikesPredictionChart.on('animationComplete', function() {
-    //     const loading = document.getElementById('loading');
-    //     loading.style.display = 'none';
-    // });
-    console.log("Rendered hourly chart for station", number);
+    // console.log("Rendered hourly chart for station", number);
 }
 
 async function renderAvgBikesPerHourChart(number) {
@@ -498,7 +493,7 @@ async function renderAvgBikesPerHourChart(number) {
             },
         },
     });
-    console.log("Rendered hourly chart for station", number);
+    // console.log("Rendered hourly chart for station", number);
 }
 
 async function initWeather() {
@@ -513,5 +508,3 @@ await Promise.all([fetchAvgBikesPerHour(), populateStationOptions(), initWeather
         updateChartForSelectedStation();
         updateCurrentStationStatus(stationsLookUpTable[document.getElementById("stationSelect").value]);
     });
-
-// getPrediction(1)
