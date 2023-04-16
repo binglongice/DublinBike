@@ -13,64 +13,82 @@
 </head>
 <body>
 <div class="header">
-    <h1 class="title">Dublin Bikes</h1>
-    <div class="weather"></div>
+    <div id="title-wrap">
+        <label class="title">Dublin Bikes</label>
+        <img id="dublin-bike-logo" src="../static/img/animation_500_lgiak8yk.gif" alt="logo">
+    </div>
+
+    <div id="weather-wrap">
+        <label id="weather"></label>
+        <img id="weather-icon" src="../static/img/icon.png" alt="logo">
+    </div>
 </div>
 <div class="container">
     <div class="left-content">
-
-        <form id="directions-form">
+        <div>
+            <label class="prediction">Now:</label>
+        </div>
+        <div id="current-station-info">
             <div>
-                <label class="input-text" for="origin-input">Please enter your location:</label>
-            </div>
-            <div>
-                <input class="input-box" id="origin-input" type="text" placeholder="Enter origin address">
-            </div>
-
-            <div>
-                <label class="input-text" for="destination-input">Please enter your destination:</label>
+                <label class="station-info">Available Bikes: </label>
+                <label id="current-station-bikes">-</label>
             </div>
             <div>
-                <input class="input-box" id="destination-input" type="text" placeholder="Enter destination address">
+                <label class="station-info">Free Bike Stands: </label>
+                <label id="current-station-bike-stands">-</label>
             </div>
             <div>
-                <label class="input-text" for="day-hour-input">Please input the day and hour you wish to travel:</label>
+                <label class="station-info">Station Status: </label>
+                <label id="current-station-status">-</label>
             </div>
-
-            <div id="dropdown">
-                <select name="date" id="date">
-                    <option value="1">Monday</option>
-                    <option value="2">Tuesday</option>
-                    <option value="3">Wednesday</option>
-                    <option value="4">Thursday</option>
-                    <option value="5">Friday</option>
-                    <option value="6">Saturday</option>
-                    <option value="7">Sunday</option>
-                </select>
-                <input id="select-time" type="time" name="select-time" value="00:00">
-            </div>
+        </div>
+        <div>
+            <label class="prediction">Prediction In 1 Hour:</label>
+        </div>
+        <div id="future-station-info">
 
             <div>
-                <button class="plan" type="submit">Plan Your Journey</button>
+                <label class="station-info">Available Bikes: </label>
+                <label id="future-station-bikes">-</label>
             </div>
-        </form>
+            <div>
+                <label class="station-info">Free Bike Stands: </label>
+                <label id="future-station-bike-stands">-</label>
+            </div>
+        </div>
         <div class="selWrapper">
             <select id="stationSelect"></select>
-            <select id="chartTypeSelect">
-                <option value="hourly">Hourly Average</option>
-                <option value="daily">Daily Average</option>
-            </select>
         </div>
-        <div class="chartContainer">
-            <canvas id="avgBikesChart"></canvas>
-<!--            <canvas id="avgBikesChart"></canvas>-->
-        </div>
-
     </div>
     <div class="right-content">
         <div id="map"></div>
+        <select id="from">
+            <option>From</option>
+        </select>
+        <select id="to">
+            <option>To</option>
+        </select>
+        <button id="go-button">GO!</button>
+    </div>
+
+</div>
+
+<div class="bottom">
+    <div class="chart-container">
+        <div id="left-chart" class="chart">
+            <label id="occupancy_predication">Occupancy Predication In Next Week</label>
+            <div class="loading-canvas-container">
+                <img src="./static/img/animation_500_lgiaszwi.gif" id="loading">
+                <canvas id="avgHourBikesPredictionChart"></canvas>
+            </div>
+        </div>
+        <div id="right-chart" class="chart">
+            <label id="occupancy_predication">Daily Occupancy Based On History</label>
+            <canvas id="avgDayBikesChart"></canvas>
+        </div>
     </div>
 </div>
+
 
 
 <script

@@ -5,40 +5,105 @@
 }
 
 body {
-    background-color: black;
+    background-color: #293531;
 }
 
 .header {
-    color: #fff;
+    color: #D8D998;
+    display: flex;
+    margin-left: 10px;
+    margin-top: 5px;
+}
+
+#dublin-bike-logo {
+    width:60px;
+    height:80%;
+    border-radius: 20px;
+    margin: 5px;
+}
+
+#weather-icon {
+    width:60px;
+    height:100%;
+    border-radius: 20px;
+/*display: inline-block;*/
 }
 
 .title{
     font-size: 50px;
 }
 
+#weather{
+    position: relative;
+    margin-bottom: 3px;
+    right: 10px;
+    font-size: 25px;
+    font-family: Arial;
+    /*display: inline-block;*/
+}
+
+#occupancy_predication {
+    font-size: 30px;
+    font-weight: bold;
+    color: #293531;
+}
+
+#weather-wrap{
+    display: flex;
+  align-items: center;
+    margin-left: auto;
+    margin-right: 10px;
+    margin-bottom: 3px;
+}
+
+#title-wrap {
+    display: flex;
+  align-items: center;
+}
+
 .container {
     display: flex;
     flex-wrap: wrap;
     width: 100%;
-    height: calc(100vh - 40px);
+    height: calc(100vh - 400px);
 }
 
 .left-content {
-    color: #fff;
-    flex-basis: 30%;
+    color: #293531;
+    background-color: #D8D998;
+    border-radius: 20px;
     flex-grow: 1;
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-
+    padding: 20px;
+    margin-left: 60px;
+    font-size: 25px;
 }
 
-.left-content input {
+#current-station-info, #future-station-info {
+    padding-top: 10%;
+    height: 40%;
+    width: 100%;
+    margin: auto;
+    text-align:center;
+}
+
+.prediction {
+    font-size: 30px;
+    margin-bottom: 20%;
+    font-weight: bold;
+}
+
+.left-content select {
     height: 36px;
     margin: 10px 10px;
     font-family: Arial, sans-serif;
+    border: none;
+    border-bottom: 3px solid;
+    text-align-last:center;
+    border-radius: 20px;
 }
 
 .plan {
@@ -69,33 +134,108 @@ body {
     flex-grow: 1;
     height: 100%;
     width: 100%;
+    margin-left: 30px;
+}
+
+.right-content select {
+    margin: 10px 50px;
+    border-radius: 20px;
+    border: none;
+    border-bottom: 3px solid;
+    text-align-last:center;
+}
+
+.right-content #from {
+    margin-left: 100px;
+}
+
+.right-content button {
+    border-radius: 20px;
+    border: none;
+    border-bottom: 3px solid;
+    width: 60px;
 }
 
 #map {
-    height: 100%;
-    width: 100%;
+    height: 95%;
+    width: 95%;
+    margin-left: 27px;
+    border-radius: 30px;
 }
 
-.input-box {
-    width: 100%;
-}
-
-.input-text {
-    display: block;
-    text-align: left;
-    width: 70%;
-    font-size: 30px;
-}
-
-#directions-form {
-    width: 70%;
-}
-
-#dropdown {
-    text-align: center;
-}
 canvas {
-  width: 80%;
-  height: 500px;
+  width: 45%;
+  height: 90%;
+    margin: 30px;
 }
 
+/*.bottom {*/
+/*  display: flex;*/
+/*  !*width: 100%;*!*/
+/*    !*#D8D998*!*/
+/*    background-color: #E1BB74;*/
+/*    border-radius: 20px;*/
+/*    margin: 20px;*/
+/*    padding-right: -30px;*/
+/*    padding-bottom: 5px;*/
+/*}*/
+
+.bottom {
+    width: 100%;
+    background-color: #E1BB74;
+    border-radius: 20px;
+    margin-top: 20px;
+    padding-right: -30px;
+    /*padding-bottom: 5px;*/
+}
+
+.chart-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.chart {
+    flex: 1 1 48%;
+    box-sizing: border-box;
+    padding: 0 10px;
+    margin-bottom: 20px;
+}
+
+#occupancy_predication {
+    display: block;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.loading-canvas-container {
+    position: relative;
+    padding-top: 60%; /* Set this value based on the aspect ratio of the loading image, e.g., for 16:9 aspect ratio, use 56.25% (9/16*100) */
+    height: 0;
+    overflow: hidden;
+}
+
+#loading {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+#avgHourBikesPredictionChart {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
+
+@media screen and (max-width: 600px) {
+    .chart {
+        flex: 1 1 100%;
+    }
+}
