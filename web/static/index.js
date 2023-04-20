@@ -21,7 +21,7 @@ function generateGoogleMapDisplayInfo(data) {
         + data.address
         + "</h3><span style=\"text-align: center;font-size:20px;\">Bikes Available: "
         + data.available_bikes + "</br>Bikes Stands Available: "
-        + data.available_bike_stands
+        + data.available_bike_stands + "</br>Status: " + data.status
         + "</Span></br></br><a style=\"font-size:16px;text-align:center;\" href=\"http://maps.google.com/maps?q="
         + data.position.lat + ","
         + data.position.lng + "\" target=\"_blank\">Check in map</a></span>";
@@ -48,7 +48,7 @@ function initMap() {
     const dublin = {lat: 53.350140, lng: -6.266155};
     // The map, centered at Dublin
     map = new google.maps.Map(document.getElementById("map"), {
-        zoom: 12,
+        zoom: 13,
         center: dublin,
     });
     // Create DirectionsService and DirectionsRenderer objects
@@ -392,7 +392,7 @@ function convertMapToArray(resultMap) {
 
     for (let hour = 0; hour < 24; hour++) {
       if (resArray[hour]) {
-        weekdayData.data[hour] = resArray[hour];
+        weekdayData.data[hour] = Math.round(resArray[hour]);
       }
     }
 
@@ -443,64 +443,23 @@ async function renderAvgBikesPerHourChartInOneWeek(number) {
             },
         },
     });
-    // console.log("Rendered hourly chart for station", number);
-}
-
-async function renderAvgBikesPerHourChart(number) {
-    const data = chartData.hourly;
-    const selectedStationData = data.filter(row => row.number === Number(number));
-    const labels = Array.from({length: 24}, (_, i) => i);
-
-    const dataset = {
-        label: 'Hourly Availability',
-        data: Array(24).fill(0),
-        backgroundColor: `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.2)`,
-        borderColor: `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 1)`,
-        borderWidth: 1,
-    };
-
-    selectedStationData.forEach((row) => {
-        dataset.data[row.hour_of_day] = row.avg_bikes;
-    });
-
-    const canvas = document.getElementById("avgHourBikesChart");
-
-    if (hourlyChart && hourlyChart.canvas === canvas) {
-        hourlyChart.destroy();
-    }
-
-    const ctx = canvas.getContext("2d");
-    hourlyChart = new Chart(ctx, {
-        type: "bar",
-        data: {
-            labels: labels,
-            datasets: [dataset],
-        },
-        options: {
-            scales: {
-                x: {
-                    title: {
-                        display: true,
-                        text: "",
-                    },
-                },
-                y: {
-                    title: {
-                        display: true,
-                        text: "Average Bikes Available",
-                    },
-                },
-            },
-        },
-    });
-    // console.log("Rendered hourly chart for station", number);
 }
 
 async function initWeather() {
     const response = await fetch(`/weather_info_display`);
     const data = await response.json();
+    console.log(data);
+    const now = data[0];
+    const oneHourLater = data[1];
     const weatherEle = document.getElementById("weather");
-    weatherEle.innerHTML = data['temp'] + "°C" + "     " + data['conditions']
+    weatherEle.innerHTML = now['temp'] + "°C" + "     " + now['conditions']
+
+    const weatherEleOneHourTemp = document.getElementById("temp");
+    weatherEleOneHourTemp.innerHTML = "Temp: " + oneHourLater['temp'] + "°C";
+    const weatherEleOneHourCondition = document.getElementById("condition");
+    weatherEleOneHourCondition.innerHTML = "Condition: " + oneHourLater['conditions'];
+    const weatherEleOneHourWind = document.getElementById("wind");
+    weatherEleOneHourWind.innerHTML = "Windspeed: " + oneHourLater['windspeed']
 }
 
 await Promise.all([fetchAvgBikesPerHour(), populateStationOptions(), initWeather()])

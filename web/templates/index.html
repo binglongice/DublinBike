@@ -24,40 +24,52 @@
     </div>
 </div>
 <div class="container">
-    <div class="left-content">
-        <div>
-            <label class="prediction">Now:</label>
-        </div>
-        <div id="current-station-info">
+    <div class="left">
+        <div class="left-content">
             <div>
-                <label class="station-info">Available Bikes: </label>
-                <label id="current-station-bikes">-</label>
+                <label class="prediction">Now:</label>
+            </div>
+            <div id="current-station-info">
+                <div>
+                    <label class="station-info">Available Bikes: </label>
+                    <label id="current-station-bikes">-</label>
+                </div>
+                <div>
+                    <label class="station-info">Free Bike Stands: </label>
+                    <label id="current-station-bike-stands">-</label>
+                </div>
+                <div>
+                    <label class="station-info">Station Status: </label>
+                    <label id="current-station-status">-</label>
+                </div>
             </div>
             <div>
-                <label class="station-info">Free Bike Stands: </label>
-                <label id="current-station-bike-stands">-</label>
+                <label class="prediction">Prediction In 1 Hour:</label>
             </div>
-            <div>
-                <label class="station-info">Station Status: </label>
-                <label id="current-station-status">-</label>
-            </div>
-        </div>
-        <div>
-            <label class="prediction">Prediction In 1 Hour:</label>
-        </div>
-        <div id="future-station-info">
+            <div id="future-station-info">
 
-            <div>
-                <label class="station-info">Available Bikes: </label>
-                <label id="future-station-bikes">-</label>
+                <div>
+                    <label class="station-info">Available Bikes: </label>
+                    <label id="future-station-bikes">-</label>
+                </div>
+                <div>
+                    <label class="station-info">Free Bike Stands: </label>
+                    <label id="future-station-bike-stands">-</label>
+                </div>
             </div>
-            <div>
-                <label class="station-info">Free Bike Stands: </label>
-                <label id="future-station-bike-stands">-</label>
+            <div class="selWrapper">
+                <select id="stationSelect"></select>
             </div>
         </div>
-        <div class="selWrapper">
-            <select id="stationSelect"></select>
+        <div class="divider">
+        </div>
+        <div class="left-content" id="left-content-bottom">
+            <div id="weather-prediction">
+                <label id="weather-condition">Next Hour Weather</label>
+                <label class="weather-pre-detail" id="temp">-</label>
+                <label class="weather-pre-detail" id="condition">-</label>
+                <label class="weather-pre-detail" id="wind">-</label>
+            </div>
         </div>
     </div>
     <div class="right-content">
@@ -88,7 +100,6 @@
         </div>
     </div>
 </div>
-
 
 
 <script

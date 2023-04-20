@@ -109,16 +109,18 @@ def get_avg_bikes_per_day(station_id):
 @app.route("/weather_info_display")
 def get_weather_info():
     engine = get_db()
+    data = []
     with engine.connect() as conn:
         query = text('''
-            SELECT datetime, temp, conditions
+            SELECT datetime, temp, conditions, windspeed
             FROM weather
             WHERE datetime >= date_sub(now(), interval 0 hour)
-            ORDER BY datetime limit 1
+            ORDER BY datetime limit 2
         ''')
         result = conn.execute(query)
-        row = result.fetchone()
-    return jsonify(row._asdict()), 200
+        for row in result.fetchall():
+            data.append(row._asdict())
+    return jsonify(data), 200
 
 
 @app.route("/prediction", methods=['GET'])
