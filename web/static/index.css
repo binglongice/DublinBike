@@ -118,7 +118,7 @@ body {
 }
 
 #current-station-info, #future-station-info {
-    padding-top: 6%;
+    padding-top: 3%;
     height: 40%;
     width: 100%;
     margin: auto;
@@ -313,7 +313,7 @@ canvas {
     }
 
     #current-station-info, #future-station-info {
-        padding-top: 2%;
+        padding-top: 1%;
         margin-top: 0;
     }
 
